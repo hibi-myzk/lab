@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Electric Stamp</title>
+    <meta name="viewport" content="width=device-width">
+    <style> canvas{ border: solid 1px red; } </style>
+  </head>
+  <body>
+    <canvas id="my canvas" width="300" height="300"></canvas>
+    <img id="ok" src="/images/tofulab_icon.png" width="300" height="300" />
+    <div id="monitor"></div>
+    <script>
+var my_canvas = document.getElementById("my canvas");
+
+var ok = document.getElementById('ok');
+ok.style.display = 'none';
+
+// 指が触れたとき
+my_canvas.addEventListener("touchstart" , touch_monitor);
+// 指が動いたとき
+//my_canvas.addEventListener("touchmove" , touch_monitor);
+// 指が離れたとき
+//my_canvas.addEventListener("touchend" , touch_monitor);
+
+var x1 = 81.6667;
+var y1 = 151.6667;
+var x2 = 129.0667;
+var y2 = 75.9611;
+var x3 = 168.0;
+var y3 = 237.6667;
+var x4 = 254.4361;
+var y4 = 63.1889;
+
+var d2 = Math.sqrt(((x1 - x2) ** 2) + ((y1 - y2) ** 2));
+var d3 = Math.sqrt(((x1 - x3) ** 2) + ((y1 - y4) ** 2));
+var d4 = Math.sqrt(((x1 - x4) ** 2) + ((y1 - y4) ** 2));
+
+d4 /= d2;
+d3 /= d2;
+d2 = 1.0;
+
+var m = 0.1;
+
+function d(p1, p2) {
+  return Math.sqrt(((p1[0] - p2[0]) ** 2) + ((p1[1] - p2[1]) ** 2));
+}
+
+// 各タッチの座標を表示
+function touch_monitor(e) {
+  e.preventDefault(); // デフォルトイベントをキャンセル
+
+  var ps = [];
+
+  for (var i = 0; i < e.touches.length; i++){
+    var t = e.touches[i];
+    var x = t.pageX;
+    var y = t.pageY;
+
+    ps.push([x, y]);
+  }
+  document.getElementById("monitor").innerHTML = '' + ps.length;
+
+  if (ps.length != 4) {
+    document.getElementById("monitor").innerHTML = 'NG - ' + ps.length;
+    return;
+  }
+
+  ps = ps.sort(function(a, b) {
+    if (a[0] < b[0]) {
+      return -1;
+    } else {
+      return 1;
+    }
+  });
+
+  var td2 = d(ps[0], ps[1]);
+  var td3 = d(ps[0], ps[2]);
+  var td4 = d(ps[0], ps[3]);
+
+  td4 /= td2;
+  td3 /= td2;
+  td2 = 1.0;
+
+  var test2 = Math.abs(d2 - td2);
+  var test3 = Math.abs(d3 - td3);
+  var test4 = Math.abs(d4 - td4);
+
+  var s = test2 + ',' + test3 + ',' + test4;
+
+  if ((test2 < m) && (test3 < m) && (test4 < m)) {
+    document.getElementById("monitor").innerHTML = 'OK';
+
+    ok.style.display = 'block';
+    my_canvas.style.display = 'none';
+  } else {
+    document.getElementById("monitor").innerHTML = 'NG';
+
+    ok.style.display = 'none';
+    my_canvas.style.display = 'block';
+  }
+}
+
+    </script>
+  </body>
+</html>
