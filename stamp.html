@@ -8,13 +8,24 @@
   </head>
   <body>
     <canvas id="my canvas" width="300" height="300"></canvas>
-    <img id="ok" src="/images/tofulab_icon.png" width="300" height="300" />
+    <img id="ok" src="images/hand.png" width="300" height="300" />
     <div id="monitor"></div>
+    <button id="clear">clear</button>
     <script>
 var my_canvas = document.getElementById("my canvas");
 
 var ok = document.getElementById('ok');
 ok.style.display = 'none';
+
+var clearButton = document.getElementById('clear');
+clearButton.style.display = 'none';
+
+clearButton.addEventListener("click" , function(e) {
+    document.getElementById("monitor").innerHTML = '';
+    clearButton.style.display = 'none';
+    ok.style.display = 'none';
+    my_canvas.style.display = 'block';
+});
 
 // 指が触れたとき
 my_canvas.addEventListener("touchstart" , touch_monitor);
@@ -32,13 +43,30 @@ var y3 = 237.6667;
 var x4 = 254.4361;
 var y4 = 63.1889;
 
+var x1v = 62.78364944458008;
+var y1v = 144.88523864746094;
+var x2v = 120.36865234375;
+var y2v = 94.90837860107422;
+var x3v = 148.3613739013672;
+var y3v = 230.84544372558594;
+var x4v = 234.73887634277344;
+var y4v = 62.52336502075195;
+
 var d2 = Math.sqrt(((x1 - x2) ** 2) + ((y1 - y2) ** 2));
-var d3 = Math.sqrt(((x1 - x3) ** 2) + ((y1 - y4) ** 2));
+var d3 = Math.sqrt(((x1 - x3) ** 2) + ((y1 - y3) ** 2));
 var d4 = Math.sqrt(((x1 - x4) ** 2) + ((y1 - y4) ** 2));
+
+var d2v = Math.sqrt(((x1v - x2v) ** 2) + ((y1v - y2v) ** 2));
+var d3v = Math.sqrt(((x1v - x3v) ** 2) + ((y1v - y3v) ** 2));
+var d4v = Math.sqrt(((x1v - x4v) ** 2) + ((y1v - y4v) ** 2));
 
 d4 /= d2;
 d3 /= d2;
 d2 = 1.0;
+
+d4v /= d2v;
+d3v /= d2v;
+d2v = 1.0;
 
 var m = 0.1;
 
@@ -86,15 +114,31 @@ function touch_monitor(e) {
   var test3 = Math.abs(d3 - td3);
   var test4 = Math.abs(d4 - td4);
 
+  var test2v = Math.abs(d2v - td2);
+  var test3v = Math.abs(d3v - td3);
+  var test4v = Math.abs(d4v - td4);
+
   var s = test2 + ',' + test3 + ',' + test4;
 
-  if ((test2 < m) && (test3 < m) && (test4 < m)) {
-    document.getElementById("monitor").innerHTML = 'OK';
+  var sv = test2v + ',' + test3v + ',' + test4v;
 
+  if ((test2 < m) && (test3 < m) && (test4 < m)) {
+    document.getElementById("monitor").innerHTML = 'Hand';
+    clearButton.style.display = 'block';
+
+    ok.src = "images/hand.png";
+    ok.style.display = 'block';
+    my_canvas.style.display = 'none';
+  } else if ((test2v < m) && (test3v < m) && (test4v < m)) {
+    document.getElementById("monitor").innerHTML = 'virus';
+    clearButton.style.display = 'block';
+
+    ok.src = "images/virus.png";
     ok.style.display = 'block';
     my_canvas.style.display = 'none';
   } else {
     document.getElementById("monitor").innerHTML = 'NG';
+    clearButton.style.display = 'block';
 
     ok.style.display = 'none';
     my_canvas.style.display = 'block';
