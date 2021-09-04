@@ -1,0 +1,97 @@
+<!doctype html>
+
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,  initial-scale=1">
+  
+    <title>情報開示</title>
+    <meta name="description" content="情報を開示するページです。">
+    <meta name="author" content="Hibi Miyazaki">
+  
+    <meta property="og:title" content="情報開示">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://hibi-myzk.github.io/lab/joho_kaiji.html">
+    <meta property="og:description" content="情報を開示するページです。">
+    <meta property="og:image" content="https://hibi-myzk.github.io/lab/images/joho_kaiji.png">
+  
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+      }
+
+      html, body, #wrapper{
+        width: 100%;
+        height: 100%;
+      }
+
+      #canvas{
+        display: block;
+	background-color: #fff;
+      }
+    </style>
+  </head>
+  
+  <body>
+    <div id="wrapper">
+      <canvas id="canvas"></canvas>
+    </div>
+
+    <script>
+      var $wrapper = document.getElementById('wrapper');
+      var $canvas = document.getElementById('canvas');
+
+      var context = $canvas.getContext('2d');
+
+      var box = {
+        x: 0,
+        y: 0,
+        sizeX: 0,
+        sizeY: 0,
+        R: 0,
+        G: 0,
+        B: 0,
+        A: .4
+      };
+      
+      function rand(min, max) {
+        return Math.floor(Math.random() * (min - max) + max);
+      }
+      
+      function draw() {
+        context.fillStyle = 'rgba(' + box.R + ', ' + box.G + ', ' + box.B + ', ' + box.A +')'; context.fillRect(box.x, box.y, box.sizeX, box.sizeY);
+      }
+      
+      function update() {
+	var x = $canvas.clientWidth;
+	var y = $canvas.clientHeight;
+	var min = x * 0.06;
+	var max = x * 0.12;
+
+        box.x = rand(0, x);
+        box.y = rand(0, y);
+        box.sizeX = rand(min - max, max);
+        box.sizeY = rand(min - max, max);
+      }
+      
+      function loop() {
+        update();
+        draw();
+        window.requestAnimationFrame(loop);
+      }
+
+      window.addEventListener('load', function(){
+        $canvas.width = $wrapper.offsetWidth;
+        $canvas.height = $wrapper.offsetHeight;
+
+        loop();
+      });
+
+      window.addEventListener('resize', function(){
+        $canvas.width = $wrapper.offsetWidth;
+        $canvas.height = $wrapper.offsetHeight;
+      });
+    </script>
+  </body>
+</html>
