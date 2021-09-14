@@ -64,15 +64,15 @@
       }
       
       function update() {
-	var x = $canvas.clientWidth;
-	var y = $canvas.clientHeight;
-	var min = x * 0.06;
-	var max = x * 0.12;
+        var x = $canvas.clientWidth;
+        var y = $canvas.clientHeight;
+        var min = x * 0.06;
+        var max = x * 0.12;
 
         box.x = rand(0, x);
         box.y = rand(0, y);
-        box.sizeX = rand(min - max, max);
-        box.sizeY = rand(min - max, max);
+        box.sizeX = rand(0 - max, max);
+        box.sizeY = rand(0 - max, max);
       }
       
       function loop() {
