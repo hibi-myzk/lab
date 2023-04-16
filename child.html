@@ -1,0 +1,14 @@
+<html>
+    <body>
+        <h1>Child</h1>
+        <script>
+            console.log("0");
+            const parent = window.parent;
+            console.log("1");
+            const doc = parent.document;
+            console.log("2");
+            const title = doc.getElementsByTagName('title')[0];
+            console.log(title.innerHTML);
+        </script>
+    </body>
+</html>
